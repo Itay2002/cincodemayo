@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   APP_TITLE,
   HISTORY_CARDS,
+  SPANISH_APP_TITLE,
+  SPANISH_HISTORY_CARDS,
   createInitialFiestaState,
   getVisibleHistoryCards,
   recordFiestaPulse
@@ -87,5 +89,23 @@ describe("fiesta pulse state", () => {
     expect(allCopy).toContain("Juarez");
     expect(allCopy).toContain("September 16");
     expect(allCopy).toContain("2026");
+    expect(allCopy).toContain("164th anniversary");
+  });
+
+  it("includes matching Spanish history cards for Spanish mode", () => {
+    expect(SPANISH_APP_TITLE).toBe("Fiesta 5 de Mayo 2026");
+    expect(SPANISH_HISTORY_CARDS).toHaveLength(HISTORY_CARDS.length);
+    expect(SPANISH_HISTORY_CARDS.map((card) => card.id)).toEqual(
+      HISTORY_CARDS.map((card) => card.id)
+    );
+
+    const spanishCopy = SPANISH_HISTORY_CARDS.map((card) =>
+      [card.eyebrow, card.title, card.body, card.interactionLabel].join(" ")
+    ).join(" ");
+
+    expect(spanishCopy).toContain("Juárez");
+    expect(spanishCopy).toContain("5 de mayo");
+    expect(spanishCopy).toContain("164.º aniversario");
+    expect(spanishCopy).toContain("Tropas Francesas Llegan a Veracruz");
   });
 });

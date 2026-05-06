@@ -4,6 +4,7 @@ import type { HistoryCard as HistoryCardType } from "../src/fiestaState";
 type HistoryCardProps = {
   card: HistoryCardType;
   index: number;
+  sourcePrefix: string;
   total: number;
   onInteract: () => void;
 };
@@ -11,6 +12,7 @@ type HistoryCardProps = {
 export function HistoryCard({
   card,
   index,
+  sourcePrefix,
   total,
   onInteract
 }: HistoryCardProps) {
@@ -46,7 +48,9 @@ export function HistoryCard({
           accessibilityRole="link"
           onPress={() => Linking.openURL(card.sourceUrl)}
         >
-          <Text style={styles.source}>Source: {card.sourceLabel}</Text>
+          <Text style={styles.source}>
+            {sourcePrefix}: {card.sourceLabel}
+          </Text>
         </Pressable>
       </View>
     </Pressable>

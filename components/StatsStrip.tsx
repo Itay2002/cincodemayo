@@ -3,16 +3,21 @@ import type { FiestaState } from "../src/fiestaState";
 
 type StatsStripProps = {
   state: FiestaState;
+  labels: {
+    bestCombo: string;
+    factsFound: string;
+    fiestaPulses: string;
+  };
 };
 
-export function StatsStrip({ state }: StatsStripProps) {
+export function StatsStrip({ labels, state }: StatsStripProps) {
   return (
     <View style={styles.container}>
-      <Stat label="Fiesta Pulses" value={state.totalPulses} />
+      <Stat label={labels.fiestaPulses} value={state.totalPulses} />
       <View style={styles.divider} />
-      <Stat label="Facts Found" value={state.factsUnlocked} />
+      <Stat label={labels.factsFound} value={state.factsUnlocked} />
       <View style={styles.divider} />
-      <Stat label="Best Combo" value={state.biggestCombo} />
+      <Stat label={labels.bestCombo} value={state.biggestCombo} />
     </View>
   );
 }

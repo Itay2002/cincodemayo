@@ -2,22 +2,32 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type CelebrationButtonProps = {
   combo: number;
+  labels: {
+    accessibilityLabel: string;
+    comboSuffix: string;
+    idle: string;
+    title: string;
+  };
   onPress: () => void;
 };
 
-export function CelebrationButton({ combo, onPress }: CelebrationButtonProps) {
+export function CelebrationButton({
+  combo,
+  labels,
+  onPress
+}: CelebrationButtonProps) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Trigger a Fiesta Pulse"
+      accessibilityLabel={labels.accessibilityLabel}
       onPress={onPress}
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
     >
       <View style={styles.innerRing}>
         <Text style={styles.icon}>✦</Text>
-        <Text style={styles.label}>Fiesta Pulse</Text>
+        <Text style={styles.label}>{labels.title}</Text>
         <Text style={styles.combo}>
-          {combo > 1 ? `${combo} tap combo` : "Tap the plaza"}
+          {combo > 1 ? `${combo} ${labels.comboSuffix}` : labels.idle}
         </Text>
       </View>
     </Pressable>
@@ -41,6 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "900",
     marginTop: 4,
+    textAlign: "center",
     textTransform: "uppercase"
   },
   icon: {
