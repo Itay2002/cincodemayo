@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View
 } from "react-native";
 import { CelebrationButton } from "./CelebrationButton";
@@ -148,11 +149,13 @@ const THEMES: Record<
 
 export function FiestaExperience({ locale }: { locale: Locale }) {
   const copy = COPY[locale];
+  const { height, width } = useWindowDimensions();
   const [fiestaState, setFiestaState] = useState(createInitialFiestaState);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [particles, setParticles] = useState<ConfettiParticle[]>([]);
   const pulseScale = useRef(new Animated.Value(0)).current;
   const theme = THEMES[fiestaState.themeId];
+  const compactLayout = width < 390 || height < 720;
   const visibleCards = getVisibleHistoryCards({
     ...fiestaState,
     factsUnlocked: Math.min(fiestaState.factsUnlocked, copy.cards.length)
@@ -332,15 +335,21 @@ export function FiestaExperience({ locale }: { locale: Locale }) {
           <FloatingBanner />
         </View>
 
-        <View style={styles.content}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          style={styles.contentScroll}
+        >
           <View style={styles.header}>
             <Text style={styles.kicker}>Cinco de Mayo</Text>
-            <Text style={styles.title}>{copy.appTitle}</Text>
+            <Text style={[styles.title, compactLayout && styles.compactTitle]}>
+              {copy.appTitle}
+            </Text>
           </View>
 
           <StatsStrip labels={copy.stats} state={fiestaState} />
 
-          <View style={styles.middle}>
+          <View style={[styles.middle, compactLayout && styles.compactMiddle]}>
             <CelebrationButton
               combo={fiestaState.currentCombo}
               labels={copy.celebration}
@@ -358,29 +367,35 @@ export function FiestaExperience({ locale }: { locale: Locale }) {
             />
 
             <View style={styles.controls}>
-              <Pressable
-                accessibilityRole="button"
-                onPress={() =>
-                  setFiestaState((current) => ({
-                    ...current,
-                    themeId: nextTheme(current.themeId)
-                  }))
-                }
-                style={styles.themeButton}
+              <View
+                style={[
+                  styles.buttonRow,
+                  compactLayout && styles.compactButtonRow
+                ]}
               >
-                <Text style={styles.themeButtonText}>
-                  {copy.themeLabels[fiestaState.themeId]}
-                </Text>
-              </Pressable>
-
-              <Link asChild href={copy.language.href}>
-                <Pressable accessibilityRole="link" style={styles.languageButton}>
-                  <Text style={styles.languageButtonText}>
-                    {copy.language.label}
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() =>
+                    setFiestaState((current) => ({
+                      ...current,
+                      themeId: nextTheme(current.themeId)
+                    }))
+                  }
+                  style={styles.themeButton}
+                >
+                  <Text style={styles.themeButtonText}>
+                    {copy.themeLabels[fiestaState.themeId]}
                   </Text>
                 </Pressable>
-              </Link>
 
+                <Link asChild href={copy.language.href}>
+                  <Pressable accessibilityRole="link" style={styles.languageButton}>
+                    <Text style={styles.languageButtonText}>
+                      {copy.language.label}
+                    </Text>
+                  </Pressable>
+                </Link>
+              </View>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -410,7 +425,7 @@ export function FiestaExperience({ locale }: { locale: Locale }) {
               </ScrollView>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </Pressable>
   );
@@ -484,19 +499,35 @@ const styles = StyleSheet.create({
     width: 104
   },
   content: {
-    flex: 1,
     gap: 16,
+    flexGrow: 1,
     justifyContent: "space-between",
     marginHorizontal: "auto",
     maxWidth: 520,
-    padding: 16,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
+    paddingTop: 16,
     width: "100%"
   },
+  contentScroll: {
+    flex: 1
+  },
   controls: {
-    alignItems: "center",
+    gap: 10
+  },
+  buttonRow: {
     flexDirection: "row",
-    gap: 10,
-    justifyContent: "space-between"
+    gap: 10
+  },
+  compactButtonRow: {
+    flexDirection: "column"
+  },
+  compactMiddle: {
+    minHeight: 132
+  },
+  compactTitle: {
+    fontSize: 28,
+    lineHeight: 32
   },
   dot: {
     borderColor: "transparent",
@@ -507,7 +538,7 @@ const styles = StyleSheet.create({
   },
   dots: {
     flexGrow: 0,
-    maxWidth: 150
+    width: "100%"
   },
   ground: {
     bottom: 0,
@@ -533,13 +564,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     minHeight: 44,
     justifyContent: "center",
+    flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 10
   },
   languageButtonText: {
     color: "#FFF7E8",
     fontSize: 13,
-    fontWeight: "900"
+    fontWeight: "900",
+    textAlign: "center"
   },
   leftMountain: {
     borderBottomColor: "rgba(11, 122, 83, 0.42)",
@@ -648,6 +681,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(22, 33, 62, 0.14)",
     borderRadius: 8,
     borderWidth: 1,
+    flex: 1,
     minHeight: 44,
     justifyContent: "center",
     paddingHorizontal: 12,
@@ -656,7 +690,8 @@ const styles = StyleSheet.create({
   themeButtonText: {
     color: "#16213E",
     fontSize: 13,
-    fontWeight: "900"
+    fontWeight: "900",
+    textAlign: "center"
   },
   title: {
     color: "#FFF7E8",
