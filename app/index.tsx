@@ -19,6 +19,7 @@ import { FloatingBanner } from "../components/FloatingBanner";
 import { HistoryCard } from "../components/HistoryCard";
 import { StatsStrip } from "../components/StatsStrip";
 import {
+  APP_TITLE,
   HISTORY_CARDS,
   createInitialFiestaState,
   getVisibleHistoryCards,
@@ -214,6 +215,13 @@ export default function FiestaPulseHistoryScreen() {
           <Building color="#F2B84B" roof="#0B7A53" tall />
           <Building color="#F7DCA7" roof="#C83232" />
         </View>
+        <View style={styles.archRow}>
+          <View style={styles.arch} />
+          <View style={styles.arch} />
+          <View style={styles.arch} />
+          <View style={styles.arch} />
+        </View>
+        <View style={styles.path} />
         <View style={[styles.ground, { backgroundColor: theme.ground }]} />
       </View>
 
@@ -231,7 +239,7 @@ export default function FiestaPulseHistoryScreen() {
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.kicker}>Cinco de Mayo</Text>
-            <Text style={styles.title}>Fiesta Pulse History</Text>
+            <Text style={styles.title}>{APP_TITLE}</Text>
           </View>
 
           <StatsStrip state={fiestaState} />
@@ -381,6 +389,23 @@ const styles = StyleSheet.create({
   header: {
     gap: 2
   },
+  arch: {
+    backgroundColor: "rgba(255, 247, 232, 0.34)",
+    borderTopLeftRadius: 999,
+    borderTopRightRadius: 999,
+    height: 74,
+    width: 48
+  },
+  archRow: {
+    bottom: "22%",
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "center",
+    left: 0,
+    position: "absolute",
+    right: 0,
+    zIndex: 2
+  },
   kicker: {
     color: "#FFF7E8",
     fontSize: 13,
@@ -459,6 +484,18 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1
+  },
+  path: {
+    backgroundColor: "rgba(255, 247, 232, 0.22)",
+    borderTopLeftRadius: 72,
+    borderTopRightRadius: 72,
+    bottom: 0,
+    height: "20%",
+    left: "42%",
+    position: "absolute",
+    right: "42%",
+    transform: [{ scaleX: 2.8 }],
+    zIndex: 1
   },
   sky: {
     ...StyleSheet.absoluteFillObject,
