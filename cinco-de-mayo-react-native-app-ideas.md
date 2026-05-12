@@ -1,4 +1,4 @@
-# Cinco de Mayo React Native App Ideas #2.
+# Cinco de Mayo React Native App Ideas #2
 
 Goal: build a cool, interactive holiday-history animation in about 20 minutes, deploy it to Vercel today, and keep a realistic path to App Store later.
 
